@@ -1,7 +1,7 @@
 const api = axios.create({
     // Usa o mesmo "endereço" da página (localhost ou 127.0.0.1). Os dois são sites
     // diferentes para o navegador, e o cookie de login não viajaria entre eles.
-    baseURL: "https://prontuario-web-back.onrender.com",
+    baseURL: "https://prontuario-web-back.onrender.com/api",
     // baseURL: `http://${window.location.hostname}:3000/api`,
     withCredentials: true, // envia o cookie de sessão junto com cada chamada
 })
