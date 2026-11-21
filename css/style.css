@@ -1,0 +1,868 @@
+/* ==========================================================================
+   Prontuário — folha de estilos
+   Organização:
+   1. Variáveis (tokens)      6. Formulários
+   2. Base                    7. Painel inicial e busca
+   3. Utilitários             8. Tabela, selos e paginação
+   4. Cabeçalho e layout      9. Dialogs e lista de dados
+   5. Botões                 10. Avisos (toasts) e responsivo
+                             11. Reservado: prontuário
+   ========================================================================== */
+
+
+/* 1. Variáveis ------------------------------------------------------------ */
+:root {
+  /* Cores */
+  --tinta: #1b2a30;
+  --tinta-suave: #52626a;
+  --papel: #f3f5f5;
+  --superficie: #ffffff;
+  --petroleo: #1f5566;
+  --petroleo-escuro: #173f4c;
+  --petroleo-suave: #e3eef1;
+  --borda: #d6dddf;
+  --borda-forte: #7f9097;
+  --perigo: #a23b3f;
+  --perigo-suave: #f8e7e7;
+  --sucesso: #1f5a41;
+  --sucesso-suave: #e3f1ea;
+  --atencao: #6b4a07;
+  --atencao-suave: #fbf0d9;
+
+  /* Tipografia
+     Atkinson Hyperlegible foi desenhada para máxima legibilidade.
+     Hospede o arquivo no próprio servidor (não use CDN do Google, por causa
+     da LGPD). Enquanto isso, a pilha cai para a fonte do sistema. */
+  --fonte: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --texto-pequeno: 0.875rem;
+  --texto-base: 1rem;
+  --texto-medio: 1.125rem;
+  --titulo-2: 1.25rem;
+  --titulo-1: 1.75rem;
+
+  /* Espaçamento e forma */
+  --espaco-1: 0.25rem;
+  --espaco-2: 0.5rem;
+  --espaco-3: 1rem;
+  --espaco-4: 1.5rem;
+  --espaco-5: 2.5rem;
+  --raio-campo: 6px;
+  --raio-painel: 12px;
+
+  /* Layout */
+  --altura-cabecalho: 3.5rem;
+  --largura-pagina: 72rem;
+  --largura-estreita: 52rem;
+  --altura-alvo: 2.75rem; /* área mínima de toque */
+}
+
+
+/* 2. Base ----------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-padding-top: calc(var(--altura-cabecalho) + 1rem);
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte);
+  font-size: var(--texto-base);
+  line-height: 1.55;
+  color: var(--tinta);
+  background: var(--papel);
+}
+
+h1, h2, h3 {
+  margin: 0 0 var(--espaco-3);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h1 { font-size: var(--titulo-1); }
+h2 { font-size: var(--titulo-2); }
+h3 { font-size: var(--texto-base); }
+
+p { margin: 0 0 var(--espaco-3); }
+
+a {
+  color: var(--petroleo);
+  text-underline-offset: 0.2em;
+}
+
+a:hover { color: var(--petroleo-escuro); }
+
+:focus-visible {
+  outline: 3px solid var(--petroleo);
+  outline-offset: 2px;
+}
+
+
+/* 3. Utilitários ---------------------------------------------------------- */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pular-link {
+  position: absolute;
+  left: var(--espaco-3);
+  top: -4rem;
+  z-index: 100;
+  padding: var(--espaco-2) var(--espaco-3);
+  background: var(--petroleo);
+  color: #fff;
+  border-radius: var(--raio-campo);
+}
+
+.pular-link:focus { top: var(--espaco-2); }
+
+.vazio {
+  padding: var(--espaco-4) 0;
+  color: var(--tinta-suave);
+}
+
+
+/* 4. Cabeçalho e layout --------------------------------------------------- */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-4);
+  min-height: var(--altura-cabecalho);
+  padding: 0 var(--espaco-4);
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda);
+}
+
+.cabecalho__marca {
+  font-size: var(--texto-medio);
+  font-weight: 700;
+  color: var(--petroleo);
+  text-decoration: none;
+}
+
+.menu {
+  display: flex;
+  gap: var(--espaco-1);
+  margin-right: auto;
+}
+
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--altura-alvo);
+  padding: 0 var(--espaco-3);
+  border-radius: var(--raio-campo);
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.menu a:hover { background: var(--papel); }
+
+.menu a[aria-current="page"] {
+  background: var(--petroleo-suave);
+  color: var(--petroleo-escuro);
+  font-weight: 700;
+}
+
+.cabecalho__usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.cabecalho__nome { color: var(--tinta-suave); }
+
+.pagina {
+  width: 100%;
+  max-width: var(--largura-pagina);
+  margin: 0 auto;
+  padding: var(--espaco-4);
+}
+
+.pagina--estreita { max-width: var(--largura-estreita); }
+
+.pagina__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-4);
+}
+
+.pagina__topo h1 { margin: 0; }
+
+
+/* 5. Botões --------------------------------------------------------------- */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-2);
+  min-height: var(--altura-alvo);
+  padding: 0 var(--espaco-3);
+  font: inherit;
+  font-weight: 700;
+  color: var(--tinta);
+  text-decoration: none;
+  background: var(--superficie);
+  border: 1px solid var(--borda-forte);
+  border-radius: var(--raio-campo);
+  cursor: pointer;
+}
+
+.botao:hover {
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+.botao--primario {
+  color: #fff;
+  background: var(--petroleo);
+  border-color: var(--petroleo);
+}
+
+.botao--primario:hover {
+  color: #fff;
+  background: var(--petroleo-escuro);
+  border-color: var(--petroleo-escuro);
+}
+
+.botao--perigo {
+  color: var(--perigo);
+  border-color: var(--perigo);
+}
+
+.botao--perigo:hover {
+  color: #fff;
+  background: var(--perigo);
+}
+
+.botao--texto {
+  padding: 0 var(--espaco-2);
+  color: var(--petroleo);
+  background: transparent;
+  border-color: transparent;
+}
+
+.botao--texto:hover {
+  color: var(--petroleo-escuro);
+  background: var(--petroleo-suave);
+}
+
+.botao--cheio { width: 100%; }
+
+.botao:disabled,
+.botao[aria-busy="true"] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+
+/* 6. Formulários ---------------------------------------------------------- */
+.form { width: 100%; }
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  min-width: 0;
+}
+
+.campo label {
+  font-weight: 700;
+}
+
+.campo input:not([type="checkbox"]),
+.campo select,
+.campo textarea {
+  width: 100%;
+  min-height: var(--altura-alvo);
+  padding: var(--espaco-2) 0.75rem;
+  font: inherit;
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--borda-forte);
+  border-radius: var(--raio-campo);
+}
+
+.campo textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  border-color: var(--petroleo);
+  outline: 3px solid var(--petroleo-suave);
+  outline-offset: 0;
+}
+
+/* O JS marca o campo inválido com aria-invalid="true" */
+.campo [aria-invalid="true"] {
+  border-color: var(--perigo);
+  background: var(--perigo-suave);
+}
+
+.campo__erro,
+.form__erro {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--perigo);
+}
+
+.form__erro {
+  padding: var(--espaco-2) 0.75rem;
+  margin-bottom: var(--espaco-3);
+  background: var(--perigo-suave);
+  border-radius: var(--raio-campo);
+}
+
+.campo__ajuda {
+  margin: 0;
+  min-height: 1.2em; /* evita o formulário "pular" quando o texto aparece */
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.obrigatorio { color: var(--perigo); }
+
+.campo__senha {
+  display: flex;
+  gap: var(--espaco-2);
+}
+
+.campo--checkbox {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: var(--espaco-2);
+}
+
+.campo--checkbox input {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-top: 0.1rem;
+  accent-color: var(--petroleo);
+}
+
+.campo--checkbox label { font-weight: 400; }
+
+/* Seções do formulário (fieldset + legend) */
+.secao {
+  min-width: 0;
+  margin: 0 0 var(--espaco-5);
+  padding: 0;
+  border: 0;
+}
+
+.secao > legend {
+  display: block;
+  width: 100%;
+  margin-bottom: var(--espaco-3);
+  padding: 0 0 var(--espaco-2);
+  font-size: var(--titulo-2);
+  font-weight: 700;
+  border-bottom: 1px solid var(--borda);
+}
+
+/* Só para campos empilhados direto na seção (ex.: consentimento).
+   Dentro da .grade, o espaçamento vem do gap. */
+.secao > .campo + .campo,
+.secao > .campo__erro + .campo,
+.secao > .campo--checkbox + .campo__erro { margin-top: var(--espaco-3); }
+
+/* Grade de 12 colunas: campo comum = 1/3, largo = 2/3, total = linha inteira */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--espaco-3);
+}
+
+.grade > .campo {
+  grid-column: span 4;
+  margin-top: 0;
+}
+
+.grade > .campo--largo { grid-column: span 8; }
+.grade > .campo--curto { grid-column: span 2; }
+.grade > .campo--total { grid-column: 1 / -1; }
+
+#bloco-responsavel { margin-bottom: var(--espaco-4); }
+
+/* Índice no topo do formulário longo */
+.indice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-1) var(--espaco-3);
+  margin-bottom: var(--espaco-4);
+  padding-bottom: var(--espaco-3);
+  border-bottom: 1px solid var(--borda);
+}
+
+.status-rascunho {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+/* Mensagem fixa dentro do formulário */
+.aviso {
+  margin: 0 0 var(--espaco-3);
+  padding: var(--espaco-2) 0.75rem;
+  border-left: 4px solid var(--petroleo);
+  background: var(--petroleo-suave);
+  border-radius: 0 var(--raio-campo) var(--raio-campo) 0;
+}
+
+/* Barra de ações sempre visível ao rolar */
+.barra-acoes {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--espaco-2);
+  margin: 0 calc(var(--espaco-4) * -1);
+  padding: var(--espaco-3) var(--espaco-4);
+  background: var(--superficie);
+  border-top: 1px solid var(--borda);
+}
+
+.barra-acoes__nota {
+  margin: 0 auto 0 0;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+/* Login */
+.pagina-login {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: var(--espaco-3);
+}
+
+.login {
+  width: 100%;
+  max-width: 26rem;
+  padding: var(--espaco-5) var(--espaco-4);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+.login__titulo { margin-bottom: var(--espaco-1); }
+.login__texto { color: var(--tinta-suave); }
+.login .campo { margin-bottom: var(--espaco-3); }
+
+.login__rodape {
+  margin: var(--espaco-4) 0 0;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+/* Login: separação entre "Entrar" e "Criar conta" */
+.login__cadastro {
+  margin-top: var(--espaco-4);
+  padding-top: var(--espaco-4);
+  border-top: 1px solid var(--borda);
+  text-align: center;
+}
+
+.login__cadastro p {
+  margin-bottom: var(--espaco-2);
+  color: var(--tinta-suave);
+}
+
+/* Páginas que exigem login ficam escondidas até o servidor confirmar a sessão */
+body.verificando {
+  visibility: hidden;
+}
+
+/* 7. Painel inicial e busca ----------------------------------------------- */
+.busca {
+  position: relative;
+  margin-bottom: var(--espaco-3);
+}
+
+.busca__campo {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0 var(--espaco-3);
+  font: inherit;
+  font-size: var(--texto-medio);
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 2px solid var(--borda-forte);
+  border-radius: var(--raio-campo);
+}
+
+.busca__campo:focus {
+  border-color: var(--petroleo);
+  outline: 3px solid var(--petroleo-suave);
+  outline-offset: 0;
+}
+
+.busca__resultados {
+  position: absolute;
+  inset: calc(100% + 4px) 0 auto 0;
+  z-index: 15;
+  margin: 0;
+  padding: var(--espaco-1);
+  max-height: 20rem;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--superficie);
+  border: 1px solid var(--borda-forte);
+  border-radius: var(--raio-campo);
+}
+
+.busca__resultados [role="option"] {
+  padding: var(--espaco-2) 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.busca__resultados [role="option"]:hover,
+.busca__resultados [aria-selected="true"] {
+  background: var(--petroleo-suave);
+}
+
+.atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+  margin-bottom: var(--espaco-5);
+}
+
+.painel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espaco-5);
+}
+
+.bloco {
+  padding-top: var(--espaco-3);
+  border-top: 2px solid var(--petroleo);
+}
+
+.lista-simples {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--espaco-3);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--borda);
+}
+
+.item__hora {
+  flex: none;
+  min-width: 3.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.item__nome { font-weight: 700; }
+
+.item__detalhe {
+  margin-left: auto;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+
+/* 8. Tabela, selos e paginação -------------------------------------------- */
+.filtros {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-3);
+}
+
+.contador {
+  margin-bottom: var(--espaco-2);
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.tabela-rolavel {
+  overflow-x: auto;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+.tabela {
+  width: 100%;
+  min-width: 42rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.tabela th,
+.tabela td {
+  padding: 0.75rem var(--espaco-3);
+  border-bottom: 1px solid var(--borda);
+  vertical-align: middle;
+}
+
+.tabela thead th {
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+  background: var(--papel);
+}
+
+.tabela tbody tr:last-child > * { border-bottom: 0; }
+.tabela tbody tr:hover { background: var(--papel); }
+.tabela tbody th { font-weight: 400; }
+
+.link-nome {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link-nome:hover { text-decoration: underline; }
+
+/* Selos de situação: o texto sempre diz o status; a cor só reforça */
+.selo {
+  display: inline-block;
+  padding: 0.1rem 0.7rem;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  color: var(--tinta-suave);
+  background: var(--borda);
+  border-radius: 999px;
+}
+
+.selo--ativo     { color: var(--sucesso);        background: var(--sucesso-suave); }
+.selo--pausa     { color: var(--atencao);        background: var(--atencao-suave); }
+.selo--alta      { color: var(--petroleo-escuro); background: var(--petroleo-suave); }
+.selo--arquivado { color: var(--tinta-suave);    background: var(--borda); }
+
+.paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-3);
+  margin-top: var(--espaco-4);
+}
+
+
+/* 9. Dialogs e lista de dados --------------------------------------------- */
+.dialog {
+  width: min(calc(100% - 2rem), 44rem);
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: dialog-entrar 160ms ease-out;
+}
+
+.dialog::backdrop { background: rgb(27 42 48 / 0.55); }
+
+.dialog--pequeno { width: min(calc(100% - 2rem), 26rem); }
+
+.dialog__conteudo {
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* permite que o corpo role dentro do dialog */
+  padding: var(--espaco-4);
+}
+
+.dialog__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-3);
+}
+
+.dialog__topo h2 { margin-bottom: var(--espaco-1); }
+
+.dialog__subtitulo {
+  margin: 0;
+  color: var(--tinta-suave);
+}
+
+.dialog__corpo {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--espaco-1) 0;
+}
+
+.dialog__corpo section + section {
+  margin-top: var(--espaco-4);
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
+
+.dialog__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--espaco-2);
+  margin-top: var(--espaco-3);
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
+
+/* Lista de dados (dl): reaproveitada no dialog e, depois, no prontuário */
+.dados {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espaco-3) var(--espaco-4);
+  margin: 0;
+}
+
+.dados dt {
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.dados dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Campo sem cadastro: aparece claramente como vazio */
+.dados dd:empty::before {
+  content: "Não informado";
+  color: var(--tinta-suave);
+  font-style: italic;
+}
+
+@keyframes dialog-entrar {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* 10. Avisos (toasts) e responsivo ---------------------------------------- */
+.avisos {
+  position: fixed;
+  right: var(--espaco-3);
+  bottom: var(--espaco-3);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  max-width: min(24rem, calc(100% - 2rem));
+}
+
+/* O ui.js cria <div class="toast toast--sucesso"> dentro de #avisos */
+.toast {
+  padding: 0.75rem var(--espaco-3);
+  color: #fff;
+  background: var(--tinta);
+  border-radius: var(--raio-campo);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
+}
+
+.toast--sucesso { background: var(--sucesso); }
+.toast--erro    { background: var(--perigo); }
+
+@media (max-width: 48rem) {
+  .cabecalho {
+    flex-wrap: wrap;
+    gap: var(--espaco-1) var(--espaco-3);
+    padding: var(--espaco-2) var(--espaco-3);
+  }
+
+  .menu {
+    order: 3;
+    width: 100%;
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  .cabecalho__nome { display: none; }
+
+  .pagina { padding: var(--espaco-3); }
+
+  .painel,
+  .filtros { grid-template-columns: 1fr; }
+
+  .grade > .campo,
+  .grade > .campo--largo { grid-column: 1 / -1; }
+  .grade > .campo--curto { grid-column: span 4; }
+
+  .barra-acoes {
+    flex-wrap: wrap;
+    margin: 0 calc(var(--espaco-3) * -1);
+    padding: var(--espaco-2) var(--espaco-3);
+  }
+
+  .barra-acoes__nota { flex-basis: 100%; }
+}
+
+@media (max-width: 36rem) {
+  .dados { grid-template-columns: 1fr; }
+  .dialog__rodape > * { flex: 1 1 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.toast {
+  cursor: pointer;
+  animation: toast-entrar 160ms ease-out;
+}
+
+@keyframes toast-entrar {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* 11. Reservado: prontuário ------------------------------------------------
+   Os componentes abaixo serão acrescentados quando desenharmos a página:
+   - cabeçalho fixo do paciente (usar top: var(--altura-cabecalho))
+   - abas (Resumo, Histórico, Plano, Evoluções, Documentos)
+   - linha do tempo das evoluções
+   - editor de texto da evolução
+   - estilos de impressão (@media print)
+   Já estão prontos para reaproveitar: .dados, .selo, .dialog, .toast,
+   .botao e .campo.
+   ------------------------------------------------------------------------- */

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Início</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="verificando">
+
+  <a href="#conteudo" class="pular-link">Ir para o conteúdo</a>
+
+  <header class="cabecalho">
+    <a href="index.html" class="cabecalho__marca">Prontuário</a>
+
+    <nav class="menu" aria-label="Principal">
+      <a href="index.html">Início</a>
+      <a href="html/pacientes.html">Pacientes</a>
+      <a href="html/anamnese.html" aria-current="page">Novo paciente</a>
+    </nav>
+
+    <div class="cabecalho__usuario">
+      <span id="nome-psicologo" class="cabecalho__nome"></span>
+      <button type="button" class="botao botao--texto" id="botao-sair">Sair</button>
+    </div>
+  </header>
+
+  <main id="conteudo" class="pagina">
+
+    <h1 id="saudacao">Bom dia</h1>
+
+    <!-- Busca de paciente: ação principal do painel -->
+    <section class="busca" aria-labelledby="titulo-busca">
+      <h2 id="titulo-busca" class="visualmente-oculto">Buscar paciente</h2>
+
+      <label for="busca-paciente" class="visualmente-oculto">Nome ou CPF do paciente</label>
+      <input
+        type="search"
+        id="busca-paciente"
+        class="busca__campo"
+        placeholder="Buscar paciente por nome ou CPF"
+        autocomplete="off"
+        role="combobox"
+        aria-expanded="false"
+        aria-controls="resultados-busca"
+        aria-autocomplete="list">
+
+      <!-- Resultados preenchidos pelo JS enquanto a pessoa digita -->
+      <ul id="resultados-busca" class="busca__resultados" role="listbox" hidden></ul>
+    </section>
+
+    <!-- Atalhos -->
+    <section class="atalhos" aria-labelledby="titulo-atalhos">
+      <h2 id="titulo-atalhos" class="visualmente-oculto">Atalhos</h2>
+      <a href="html/anamnese.html" class="botao botao--primario">Cadastrar paciente</a>
+      <a href="html/pacientes.html" class="botao">Ver todos os pacientes</a>
+    </section>
+
+    <div class="painel">
+
+      <section class="bloco" aria-labelledby="titulo-sessoes">
+        <h2 id="titulo-sessoes">Sessões de hoje</h2>
+
+        <ol id="lista-sessoes" class="lista-simples">
+          <!-- Preenchido pelo JS -->
+        </ol>
+
+        <p id="vazio-sessoes" class="vazio" hidden>
+          Nenhuma sessão registrada para hoje.
+        </p>
+      </section>
+
+      <section class="bloco" aria-labelledby="titulo-recentes">
+        <h2 id="titulo-recentes">Atendidos recentemente</h2>
+
+        <ul id="lista-recentes" class="lista-simples">
+          <!-- Preenchido pelo JS -->
+        </ul>
+
+        <p id="vazio-recentes" class="vazio" hidden>
+          Você ainda não tem pacientes. <a href="anamnese.html">Cadastre o primeiro</a>.
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Área das mensagens rápidas (toasts) -->
+  <div id="avisos" class="avisos" role="status" aria-live="polite"></div>
+
+  <!-- Modelos usados pelo JS para montar as listas -->
+  <template id="modelo-sessao">
+    <li class="item">
+      <span class="item__hora"></span>
+      <a class="item__nome" href="#"></a>
+    </li>
+  </template>
+
+  <template id="modelo-recente">
+    <li class="item">
+      <a class="item__nome" href="#"></a>
+      <span class="item__detalhe"></span>
+    </li>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.7.9/dist/axios.min.js"></script>
+  <script src="javascript/api.js"></script>
+  <script src="javascript/ui.js"></script>
+  <script src="javascript/sessao.js"></script>
+  <!-- depois, o script da própria página -->
+</body>
+</html>

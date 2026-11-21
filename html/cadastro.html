@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Criar conta</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="pagina-login">
+
+  <main class="login">
+    <h1 class="login__titulo">Criar conta</h1>
+    <p class="login__texto">Cadastro de psicólogo(a).</p>
+
+    <form id="form-cadastro" class="form" novalidate method="post">
+
+      <div class="campo">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" name="nome" autocomplete="name" required autofocus>
+      </div>
+
+      <div class="campo">
+        <label for="crp">CRP</label>
+        <input type="text" id="crp" name="crp" placeholder="11/12345" autocomplete="off" required>
+      </div>
+
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" autocomplete="username" required>
+      </div>
+
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" autocomplete="new-password" minlength="8" required>
+        <p class="campo__ajuda">- Mínimo de 8 caractéres.</p>
+      </div>
+
+      <div class="campo">
+        <label for="confirmarSenha">Confirmar senha</label>
+        <input type="password" id="confirmarSenha" name="confirmarSenha" autocomplete="new-password" required>
+      </div>
+
+      <p class="form__erro" id="erro-geral" role="alert" hidden></p>
+
+      <button type="submit" class="botao botao--primario botao--cheio" id="botao-cadastrar">
+        Criar conta
+      </button>
+    </form>
+
+    <p class="login__rodape">Já tem conta? <a href="login.html">Entrar</a></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.7.9/dist/axios.min.js"></script>
+  <script src="../javascript/api.js"></script>
+  <script src="../javascript/ui.js"></script>
+  <script src="../javascript/cadastro.js"></script>
+</body>
+</html>

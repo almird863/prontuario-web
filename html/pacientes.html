@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pacientes</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="verificando">
+
+  <a href="#conteudo" class="pular-link">Ir para o conteúdo</a>
+
+  <header class="cabecalho">
+    <a href="index.html" class="cabecalho__marca">Prontuário</a>
+
+    <nav class="menu" aria-label="Principal">
+      <a href="../index.html">Início</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="anamnese.html" aria-current="page">Novo paciente</a>
+    </nav>
+
+    <div class="cabecalho__usuario">
+      <span id="nome-psicologo" class="cabecalho__nome"></span>
+      <button type="button" class="botao botao--texto" id="botao-sair">Sair</button>
+    </div>
+  </header>
+
+  <main id="conteudo" class="pagina">
+
+    <div class="pagina__topo">
+      <h1>Pacientes</h1>
+      <a href="anamnese.html" class="botao botao--primario">Cadastrar paciente</a>
+    </div>
+
+    <!-- Busca e filtros -->
+    <form class="filtros" role="search" id="form-filtros">
+      <div class="campo">
+        <label for="filtro-busca">Buscar</label>
+        <input type="search" id="filtro-busca" name="busca" placeholder="Nome ou CPF" autocomplete="off">
+      </div>
+
+      <div class="campo">
+        <label for="filtro-status">Situação</label>
+        <select id="filtro-status" name="status">
+          <option value="">Todos</option>
+          <option value="ativo" selected>Ativos</option>
+          <option value="pausa">Em pausa</option>
+          <option value="alta">Alta</option>
+          <option value="arquivado">Arquivados</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="filtro-ordem">Ordenar por</label>
+        <select id="filtro-ordem" name="ordem">
+          <option value="nome">Nome (A–Z)</option>
+          <option value="recente">Atendidos recentemente</option>
+          <option value="cadastro">Data de cadastro</option>
+        </select>
+      </div>
+    </form>
+
+    <!-- Contador anunciado a leitores de tela quando a lista muda -->
+    <p id="contador" class="contador" aria-live="polite"></p>
+
+    <div class="tabela-rolavel">
+      <table class="tabela" id="tabela-pacientes">
+        <caption class="visualmente-oculto">Lista de pacientes</caption>
+        <thead>
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Idade</th>
+            <th scope="col">Telefone</th>
+            <th scope="col">Situação</th>
+            <th scope="col">Última sessão</th>
+            <th scope="col"><span class="visualmente-oculto">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody id="corpo-pacientes">
+          <!-- Linhas criadas pelo JS a partir do modelo abaixo -->
+        </tbody>
+      </table>
+    </div>
+
+    <p id="vazio-pacientes" class="vazio" hidden>
+      Nenhum paciente encontrado. Ajuste os filtros ou
+      <a href="anamnese.html">cadastre um novo paciente</a>.
+    </p>
+
+    <nav class="paginacao" aria-label="Paginação" id="paginacao" hidden>
+      <button type="button" class="botao" id="pagina-anterior">Anterior</button>
+      <span id="pagina-atual">Página 1 de 1</span>
+      <button type="button" class="botao" id="pagina-proxima">Próxima</button>
+    </nav>
+
+  </main>
+
+  <!-- Detalhes do paciente -->
+  <dialog id="dialog-paciente" class="dialog" aria-labelledby="dialog-titulo">
+    <article class="dialog__conteudo">
+
+      <header class="dialog__topo">
+        <div>
+          <h2 id="dialog-titulo"><!-- nome do paciente --></h2>
+          <p id="dialog-subtitulo" class="dialog__subtitulo"><!-- idade · situação --></p>
+        </div>
+        <button type="button" class="botao botao--texto" data-fechar-dialog aria-label="Fechar detalhes">
+          Fechar
+        </button>
+      </header>
+
+      <div class="dialog__corpo">
+
+        <section aria-labelledby="dlg-identificacao">
+          <h3 id="dlg-identificacao">Identificação</h3>
+          <dl class="dados">
+            <div><dt>Nome social</dt><dd data-campo="nomeSocial"></dd></div>
+            <div><dt>Data de nascimento</dt><dd data-campo="dataNascimento"></dd></div>
+            <div><dt>CPF</dt><dd data-campo="cpf"></dd></div>
+            <div><dt>Gênero</dt><dd data-campo="genero"></dd></div>
+            <div><dt>Estado civil</dt><dd data-campo="estadoCivil"></dd></div>
+            <div><dt>Escolaridade</dt><dd data-campo="escolaridade"></dd></div>
+            <div><dt>Profissão</dt><dd data-campo="profissao"></dd></div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="dlg-contato">
+          <h3 id="dlg-contato">Contato</h3>
+          <dl class="dados">
+            <div><dt>Telefone</dt><dd data-campo="telefone"></dd></div>
+            <div><dt>E-mail</dt><dd data-campo="email"></dd></div>
+            <div><dt>Endereço</dt><dd data-campo="endereco"></dd></div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="dlg-emergencia">
+          <h3 id="dlg-emergencia">Emergência e responsável</h3>
+          <dl class="dados">
+            <div><dt>Contato de emergência</dt><dd data-campo="emergencia"></dd></div>
+            <div data-somente-menor hidden><dt>Responsável legal</dt><dd data-campo="responsavel"></dd></div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="dlg-clinico">
+          <h3 id="dlg-clinico">Informações clínicas</h3>
+          <dl class="dados">
+            <div><dt>Queixa principal</dt><dd data-campo="queixa"></dd></div>
+            <div><dt>Encaminhado por</dt><dd data-campo="encaminhamento"></dd></div>
+            <div><dt>Medicação em uso</dt><dd data-campo="medicacao"></dd></div>
+            <div><dt>Tratamentos anteriores</dt><dd data-campo="tratamentosAnteriores"></dd></div>
+            <div><dt>Histórico Familiar</dt><dd data-campo="historicoFamiliar"></dd></div>
+            <div><dt>Início do acompanhamento</dt><dd data-campo="dataInicio"></dd></div>
+          </dl>
+        </section>
+
+      </div>
+
+      <footer class="dialog__rodape">
+        <a href="#" class="botao botao--primario" id="dialog-abrir-prontuario">Abrir prontuário</a>
+        <a href="#" class="botao" id="dialog-editar">Editar cadastro</a>
+        <button type="button" class="botao botao--perigo" id="dialog-arquivar">Arquivar paciente</button>
+      </footer>
+
+    </article>
+  </dialog>
+
+  <!-- Confirmação antes de arquivar -->
+  <dialog id="dialog-confirmar" class="dialog dialog--pequeno" aria-labelledby="confirmar-titulo">
+    <form method="dialog" class="dialog__conteudo">
+      <h2 id="confirmar-titulo">Arquivar este paciente?</h2>
+      <p>O cadastro e o prontuário continuam guardados. Você pode reativar o paciente depois.</p>
+      <div class="dialog__rodape">
+        <button value="cancelar" class="botao">Cancelar</button>
+        <button value="confirmar" class="botao botao--perigo">Arquivar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="avisos" class="avisos" role="status" aria-live="polite"></div>
+
+  <!-- Modelo de linha da tabela -->
+  <template id="modelo-linha">
+    <tr>
+      <th scope="row"><a href="#" class="link-nome" data-abrir-dialog></a></th>
+      <td data-col="idade"></td>
+      <td data-col="telefone"></td>
+      <td><span class="selo" data-col="status"></span></td>
+      <td data-col="ultimaSessao"></td>
+      <td><button type="button" class="botao botao--texto" data-abrir-dialog>Ver detalhes</button></td>
+    </tr>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.7.9/dist/axios.min.js"></script>
+  <script src="../javascript/api.js"></script>
+  <script src="../javascript/ui.js"></script>
+  <script src="../javascript/sessao.js"></script>
+  <!-- depois, o script da própria página -->
+  <script src="../javascript/pacientes.js"></script>
+</body>
+</html>
