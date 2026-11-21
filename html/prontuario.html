@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prontuário</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/prontuario.css">
+</head>
+<body class="verificando">
+
+  <a href="#conteudo" class="pular-link">Ir para o conteúdo</a>
+
+  <header class="cabecalho">
+    <a href="../index.html" class="cabecalho__marca">Prontuário</a>
+
+    <nav class="menu" aria-label="Principal">
+      <a href="../index.html">Início</a>
+      <a href="pacientes.html" aria-current="page">Pacientes</a>
+      <a href="anamnese.html">Novo paciente</a>
+    </nav>
+
+    <div class="cabecalho__usuario">
+      <span id="nome-psicologo" class="cabecalho__nome"></span>
+      <button type="button" class="botao botao--texto" id="botao-sair">Sair</button>
+    </div>
+  </header>
+
+  <main id="conteudo" class="pagina">
+
+    <a href="pacientes.html" class="botao botao--texto voltar">← Voltar para pacientes</a>
+
+    <!-- Dados do paciente: lidos do cadastro, nunca copiados para o prontuário -->
+    <section class="paciente-cabecalho" aria-labelledby="paciente-nome">
+      <div class="paciente-cabecalho__topo">
+        <div>
+          <h1 id="paciente-nome">Carregando...</h1>
+          <p id="paciente-resumo" class="paciente-cabecalho__resumo"></p>
+        </div>
+
+        <div class="paciente-cabecalho__acoes">
+          <span class="selo" id="paciente-status"></span>
+          <a href="#" class="botao" id="link-pdf">Exportar PDF</a>
+          <a href="#" class="botao" id="link-editar">Editar cadastro</a>
+        </div>
+      </div>
+
+      <dl class="dados dados--linha">
+        <div><dt>Telefone</dt><dd data-campo="telefone"></dd></div>
+        <div><dt>E-mail</dt><dd data-campo="email"></dd></div>
+        <div><dt>Contato de emergência</dt><dd data-campo="emergencia"></dd></div>
+        <div data-somente-menor hidden><dt>Responsável legal</dt><dd data-campo="responsavel"></dd></div>
+        <div><dt>Início do acompanhamento</dt><dd data-campo="dataInicio"></dd></div>
+      </dl>
+    </section>
+
+    <!-- Abas do prontuário -->
+    <div class="abas" role="tablist" aria-label="Seções do prontuário">
+      <button type="button" role="tab" class="aba" id="aba-resumo" data-aba="resumo"
+              aria-controls="painel-resumo" aria-selected="true">Resumo clínico</button>
+      <button type="button" role="tab" class="aba" id="aba-plano" data-aba="plano"
+              aria-controls="painel-plano" aria-selected="false" tabindex="-1">Plano terapêutico</button>
+      <button type="button" role="tab" class="aba" id="aba-evolucoes" data-aba="evolucoes"
+              aria-controls="painel-evolucoes" aria-selected="false" tabindex="-1">Evoluções</button>
+    </div>
+
+    <!-- Resumo clínico -->
+    <section role="tabpanel" id="painel-resumo" aria-labelledby="aba-resumo" tabindex="0">
+      <h2 class="visualmente-oculto">Resumo clínico</h2>
+
+      <form id="form-resumo" class="form" method="post" novalidate>
+        <div class="grade">
+          <div class="campo campo--total">
+            <label for="demandaInicial">Demanda inicial</label>
+            <textarea id="demandaInicial" name="demandaInicial" rows="5" maxlength="10000"></textarea>
+            <p class="campo__ajuda">Motivo da busca e o que o paciente espera do acompanhamento.</p>
+          </div>
+
+          <div class="campo campo--total">
+            <label for="historicoRelevante">Histórico relevante</label>
+            <textarea id="historicoRelevante" name="historicoRelevante" rows="6" maxlength="10000"></textarea>
+            <p class="campo__ajuda">Histórico pessoal, familiar e de saúde que importa para o caso.</p>
+          </div>
+
+          <div class="campo campo--total">
+            <label for="hipoteseFormulacao">Hipótese / formulação</label>
+            <textarea id="hipoteseFormulacao" name="hipoteseFormulacao" rows="6" maxlength="10000"></textarea>
+            <p class="campo__ajuda">Compreensão clínica do caso.</p>
+          </div>
+
+          <div class="campo campo--total">
+            <label for="observacoes">Observações</label>
+            <textarea id="observacoes" name="observacoes" rows="3" maxlength="10000"></textarea>
+          </div>
+        </div>
+
+        <div class="barra-acoes">
+          <p class="barra-acoes__nota" id="status-resumo" aria-live="polite"></p>
+          <button type="submit" class="botao botao--primario" id="botao-salvar-resumo">Salvar resumo</button>
+        </div>
+      </form>
+    </section>
+
+    <section role="tabpanel" id="painel-plano" aria-labelledby="aba-plano" tabindex="0" hidden>
+      <h2 class="visualmente-oculto">Plano terapêutico</h2>
+      <p class="vazio">O plano terapêutico virá aqui.</p>
+    </section>
+
+    <!-- Evoluções -->
+    <section role="tabpanel" id="painel-evolucoes" aria-labelledby="aba-evolucoes" tabindex="0" hidden>
+      <h2 class="visualmente-oculto">Evoluções</h2>
+
+      <!-- Linha do tempo -->
+      <div id="area-lista">
+        <div class="evolucoes__topo">
+          <p class="contador" id="contador-evolucoes" aria-live="polite"></p>
+          <button type="button" class="botao botao--primario" id="botao-nova-evolucao">Nova evolução</button>
+        </div>
+
+        <div id="lista-evolucoes"></div>
+
+        <p class="vazio" id="vazio-evolucoes" hidden>Nenhuma evolução registrada ainda.</p>
+      </div>
+
+      <!-- Editor de rascunho (salvamento automático) -->
+      <form id="form-evolucao" class="form" method="post" novalidate hidden>
+        <h3 id="titulo-editor">Nova evolução</h3>
+
+        <div class="grade">
+          <div class="campo campo--quarto">
+            <label for="ev-dataSessao">Data e hora</label>
+            <input type="datetime-local" id="ev-dataSessao" name="dataSessao">
+          </div>
+
+          <div class="campo campo--quarto">
+            <label for="ev-duracaoMin">Duração (minutos)</label>
+            <input type="number" id="ev-duracaoMin" name="duracaoMin" min="1" max="480" step="1" inputmode="numeric">
+          </div>
+
+          <div class="campo campo--quarto">
+            <label for="ev-modalidade">Modalidade</label>
+            <select id="ev-modalidade" name="modalidade">
+              <option value="">Não informada</option>
+              <option value="presencial">Presencial</option>
+              <option value="online">Online</option>
+              <option value="hibrido">Híbrido</option>
+            </select>
+          </div>
+
+          <div class="campo campo--quarto">
+            <label for="ev-presenca">Presença</label>
+            <select id="ev-presenca" name="presenca">
+              <option value="compareceu">Compareceu</option>
+              <option value="faltou">Faltou</option>
+              <option value="desmarcou">Desmarcou</option>
+            </select>
+          </div>
+
+          <div class="campo campo--total">
+            <label for="ev-resumo">Resumo da sessão</label>
+            <textarea id="ev-resumo" name="resumo" rows="9" maxlength="10000"></textarea>
+          </div>
+
+          <div class="campo campo--total">
+            <label for="ev-observacoes">Observações</label>
+            <textarea id="ev-observacoes" name="observacoes" rows="4" maxlength="10000"></textarea>
+          </div>
+
+          <div class="campo campo--total">
+            <label for="ev-proximosPassos">Próximos passos</label>
+            <textarea id="ev-proximosPassos" name="proximosPassos" rows="3" maxlength="10000"></textarea>
+          </div>
+        </div>
+
+        <div class="barra-acoes">
+          <p class="barra-acoes__nota" id="status-evolucao" aria-live="polite"></p>
+          <button type="button" class="botao botao--perigo" id="botao-descartar">Descartar rascunho</button>
+          <button type="button" class="botao" id="botao-voltar-lista">Voltar à lista</button>
+          <button type="button" class="botao botao--primario" id="botao-finalizar">Finalizar sessão</button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Confirmação antes de descartar um rascunho -->
+  <dialog id="dialog-descartar" class="dialog dialog--pequeno" aria-labelledby="descartar-titulo">
+    <form method="dialog" class="dialog__conteudo">
+      <h2 id="descartar-titulo">Descartar este rascunho?</h2>
+      <p>O texto escrito será apagado e não poderá ser recuperado.</p>
+      <div class="dialog__rodape">
+        <button value="cancelar" class="botao">Cancelar</button>
+        <button value="descartar" class="botao botao--perigo">Descartar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Confirmação antes de finalizar uma sessão -->
+  <dialog id="dialog-finalizar" class="dialog dialog--pequeno" aria-labelledby="finalizar-titulo">
+    <form method="dialog" class="dialog__conteudo">
+      <h2 id="finalizar-titulo">Finalizar esta sessão?</h2>
+      <p>Depois de finalizada, a evolução não poderá mais ser editada nem excluída. Correções poderão ser feitas por meio de adendos.</p>
+      <div class="dialog__rodape">
+        <button value="cancelar" class="botao">Voltar e revisar</button>
+        <button value="finalizar" class="botao botao--primario">Finalizar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Adendo: texto acrescentado a uma evolução já finalizada -->
+  <dialog id="dialog-adendo" class="dialog" aria-labelledby="adendo-titulo">
+    <form id="form-adendo" class="dialog__conteudo" method="post" novalidate>
+      <h2 id="adendo-titulo">Adicionar adendo</h2>
+      <p>O adendo é acrescentado à evolução com a data e a hora de agora. O texto original não muda, e o adendo não poderá ser editado depois.</p>
+
+      <div class="campo">
+        <label for="texto-adendo">Texto do adendo</label>
+        <textarea id="texto-adendo" name="texto" rows="6" maxlength="5000"></textarea>
+      </div>
+
+      <div class="dialog__rodape">
+        <button type="button" class="botao" id="botao-cancelar-adendo">Cancelar</button>
+        <button type="submit" class="botao botao--primario" id="botao-salvar-adendo">Salvar adendo</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modelo de uma evolução na linha do tempo (o JavaScript copia e preenche) -->
+  <template id="modelo-evolucao">
+    <article class="evolucao">
+      <header class="evolucao__topo">
+        <div>
+          <h3 class="evolucao__data"></h3>
+          <p class="evolucao__meta"></p>
+        </div>
+        <div class="evolucao__acoes">
+          <span class="selo evolucao__status"></span>
+          <button type="button" class="botao" data-acao="editar">Continuar editando</button>
+          <button type="button" class="botao" data-acao="adendo">Adicionar adendo</button>
+        </div>
+      </header>
+
+      <section data-secao="resumo"><h4>Resumo da sessão</h4><p class="evolucao__corpo"></p></section>
+      <section data-secao="observacoes"><h4>Observações</h4><p class="evolucao__corpo"></p></section>
+      <section data-secao="proximosPassos"><h4>Próximos passos</h4><p class="evolucao__corpo"></p></section>
+      <p class="evolucao__vazio" hidden>Rascunho sem texto.</p>
+
+      <div class="evolucao__adendos">
+        <h4>Adendos</h4>
+        <ul></ul>
+      </div>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.7.9/dist/axios.min.js"></script>
+  <script src="../javascript/api.js"></script>
+  <script src="../javascript/ui.js"></script>
+  <script src="../javascript/sessao.js"></script>
+  <script src="../javascript/prontuario.js"></script>
+  <script src="../javascript/evolucoes.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prontuário em PDF</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/impressao.css">
+</head>
+<body class="verificando">
+
+  <!-- Esta barra aparece só na tela; não vai para o PDF -->
+  <div class="barra-impressao nao-imprimir">
+    <a href="#" id="link-voltar" class="botao botao--texto">← Voltar ao prontuário</a>
+    <p class="barra-impressao__aviso">
+      Este documento contém dados sensíveis de saúde. Guarde o arquivo com segurança.
+      Evoluções em rascunho não são incluídas.
+    </p>
+    <button type="button" class="botao botao--primario" id="botao-imprimir" disabled>Salvar como PDF</button>
+  </div>
+
+  <p class="dica nao-imprimir">
+    Na janela que abrir, escolha “Salvar como PDF” como destino e desmarque “Cabeçalhos e rodapés”,
+    para o endereço da página não sair impresso.
+  </p>
+
+  <main>
+    <article id="documento" class="documento" aria-live="polite">
+      <p class="vazio">Carregando...</p>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.7.9/dist/axios.min.js"></script>
+  <script src="../javascript/api.js"></script>
+  <script src="../javascript/ui.js"></script>
+  <script src="../javascript/sessao.js"></script>
+  <script src="../javascript/impressao.js"></script>
+</body>
+</html>

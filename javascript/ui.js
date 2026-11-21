@@ -46,7 +46,7 @@ function toastNaProximaPagina(mensagem, tipo = "info") {
 // Transforma o erro do Axios numa frase para mostrar ao usuário
 function mensagemDoErro(erro, padrao = "Não foi possível concluir a ação.") {
     if (erro.response) return erro.response.data?.mensagem || padrao
-    return "Não consegui falar com o servidor. Ele está rodando?"
+    return "Erro ao se comunicar com o servidor."
 }
 
 // Ao abrir a página, mostra o aviso deixado pela página anterior (se houver)

@@ -831,6 +831,534 @@ body.verificando {
   .barra-acoes__nota { flex-basis: 100%; }
 }
 
+/* Estilos exclusivos da página do prontuário (usa as variáveis do style.css) */
+
+.voltar {
+  margin-bottom: var(--espaco-2);
+  margin-left: calc(var(--espaco-2) * -1);
+}
+
+/* Cabeçalho do paciente: fica colado abaixo do menu ao rolar a página */
+.paciente-cabecalho {
+  position: sticky;
+  top: var(--altura-cabecalho);
+  z-index: 15;
+  margin-bottom: var(--espaco-4);
+  padding: var(--espaco-3) 0;
+  background: var(--papel);
+  border-bottom: 1px solid var(--borda);
+}
+
+.paciente-cabecalho__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-3);
+}
+
+.paciente-cabecalho h1 { margin-bottom: var(--espaco-1); }
+
+.paciente-cabecalho__resumo {
+  margin: 0;
+  color: var(--tinta-suave);
+}
+
+.paciente-cabecalho__acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+/* Lista de dados em linha: os itens se distribuem conforme o espaço */
+.dados.dados--linha {
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+/* Abas */
+.abas {
+  display: flex;
+  gap: var(--espaco-1);
+  margin-bottom: var(--espaco-4);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda);
+}
+
+.aba {
+  min-height: var(--altura-alvo);
+  padding: 0 var(--espaco-3);
+  font: inherit;
+  font-weight: 700;
+  color: var(--tinta-suave);
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.aba:hover { color: var(--tinta); }
+
+.aba[aria-selected="true"] {
+  color: var(--petroleo-escuro);
+  border-bottom-color: var(--petroleo);
+}
+
+/* Estilos exclusivos da página do prontuário (usa as variáveis do style.css) */
+
+.voltar {
+  margin-bottom: var(--espaco-2);
+  margin-left: calc(var(--espaco-2) * -1);
+}
+
+/* Cabeçalho do paciente: fica colado abaixo do menu ao rolar a página */
+.paciente-cabecalho {
+  position: sticky;
+  top: var(--altura-cabecalho);
+  z-index: 15;
+  margin-bottom: var(--espaco-4);
+  padding: var(--espaco-3) 0;
+  background: var(--papel);
+  border-bottom: 1px solid var(--borda);
+}
+
+.paciente-cabecalho__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-3);
+}
+
+.paciente-cabecalho h1 { margin-bottom: var(--espaco-1); }
+
+.paciente-cabecalho__resumo {
+  margin: 0;
+  color: var(--tinta-suave);
+}
+
+.paciente-cabecalho__acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+/* Lista de dados em linha: os itens se distribuem conforme o espaço */
+.dados.dados--linha {
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+/* Abas */
+.abas {
+  display: flex;
+  gap: var(--espaco-1);
+  margin-bottom: var(--espaco-4);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda);
+}
+
+.aba {
+  min-height: var(--altura-alvo);
+  padding: 0 var(--espaco-3);
+  font: inherit;
+  font-weight: 700;
+  color: var(--tinta-suave);
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.aba:hover { color: var(--tinta); }
+
+.aba[aria-selected="true"] {
+  color: var(--petroleo-escuro);
+  border-bottom-color: var(--petroleo);
+}
+
+/* Em telas pequenas o cabeçalho fixo ocuparia espaço demais */
+@media (max-width: 48rem) {
+  .paciente-cabecalho { position: static; }
+}
+
+/* Estilos exclusivos da página do prontuário (usa as variáveis do style.css) */
+
+.voltar {
+  margin-bottom: var(--espaco-2);
+  margin-left: calc(var(--espaco-2) * -1);
+}
+
+/* Cabeçalho do paciente: fica colado abaixo do menu ao rolar a página */
+.paciente-cabecalho {
+  position: sticky;
+  top: var(--altura-cabecalho);
+  z-index: 15;
+  margin-bottom: var(--espaco-4);
+  padding: var(--espaco-3) 0;
+  background: var(--papel);
+  border-bottom: 1px solid var(--borda);
+}
+
+.paciente-cabecalho__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-3);
+}
+
+.paciente-cabecalho h1 { margin-bottom: var(--espaco-1); }
+
+.paciente-cabecalho__resumo {
+  margin: 0;
+  color: var(--tinta-suave);
+}
+
+.paciente-cabecalho__acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+/* Lista de dados em linha: os itens se distribuem conforme o espaço */
+.dados.dados--linha {
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+/* Abas */
+.abas {
+  display: flex;
+  gap: var(--espaco-1);
+  margin-bottom: var(--espaco-4);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda);
+}
+
+.aba {
+  min-height: var(--altura-alvo);
+  padding: 0 var(--espaco-3);
+  font: inherit;
+  font-weight: 700;
+  color: var(--tinta-suave);
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.aba:hover { color: var(--tinta); }
+
+.aba[aria-selected="true"] {
+  color: var(--petroleo-escuro);
+  border-bottom-color: var(--petroleo);
+}
+
+/* Em telas pequenas o cabeçalho fixo ocuparia espaço demais */
+@media (max-width: 48rem) {
+  .paciente-cabecalho { position: static; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Evoluções                                                           */
+/* ------------------------------------------------------------------ */
+.evolucoes__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-4);
+}
+
+.evolucoes__topo .contador { margin: 0; }
+
+/* Linha do tempo: cada evolução tem uma linha vertical e um ponto à esquerda */
+.evolucao {
+  position: relative;
+  padding: 0 0 var(--espaco-5) var(--espaco-4);
+  border-left: 3px solid var(--petroleo-suave);
+}
+
+.evolucao::before {
+  content: "";
+  position: absolute;
+  top: 0.35rem;
+  left: -6px;
+  width: 15px;
+  height: 15px;
+  background: var(--petroleo);
+  border: 3px solid var(--papel);
+  border-radius: 50%;
+}
+
+.evolucao--rascunho { border-left-color: var(--atencao-suave); }
+.evolucao--rascunho::before { background: var(--atencao); }
+
+.evolucao__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-3);
+}
+
+.evolucao__data {
+  margin: 0 0 var(--espaco-1);
+  font-size: var(--texto-medio);
+}
+
+.evolucao__meta {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.evolucao__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.evolucao section + section { margin-top: var(--espaco-3); }
+
+.evolucao h4 {
+  margin: 0 0 var(--espaco-1);
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+/* pre-wrap: respeita as quebras de linha digitadas pela pessoa */
+.evolucao__corpo {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.evolucao__vazio {
+  margin: 0;
+  font-style: italic;
+  color: var(--tinta-suave);
+}
+
+.evolucao__adendos {
+  margin-top: var(--espaco-4);
+  padding-top: var(--espaco-3);
+  border-top: 1px dashed var(--borda-forte);
+}
+
+.evolucao__adendos ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evolucao__adendos li + li { margin-top: var(--espaco-3); }
+
+.evolucao__adendos time {
+  display: block;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+/* Página de impressão do prontuário (usa as variáveis do style.css) */
+
+/* ---------------- Na tela ---------------- */
+.barra-impressao {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding: var(--espaco-2) var(--espaco-4);
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda);
+}
+
+.barra-impressao__aviso {
+  flex: 1 1 18rem;
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.dica {
+  max-width: 48rem;
+  margin: var(--espaco-3) auto 0;
+  padding: 0 var(--espaco-4);
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.documento {
+  max-width: 48rem;
+  margin: var(--espaco-3) auto var(--espaco-5);
+  padding: var(--espaco-5);
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+.documento h1 { margin-bottom: var(--espaco-1); }
+
+.documento h2 {
+  margin: var(--espaco-5) 0 var(--espaco-3);
+  padding-bottom: var(--espaco-1);
+  border-bottom: 1px solid var(--borda-forte);
+}
+
+.documento h3 {
+  margin: 0 0 var(--espaco-1);
+  font-size: var(--texto-medio);
+}
+
+.documento h4 {
+  margin: 0 0 var(--espaco-1);
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.pdf-sub {
+  margin-bottom: var(--espaco-4);
+  color: var(--tinta-suave);
+}
+
+/* Lista de dados do paciente: rótulo à esquerda, valor à direita */
+.pdf-dados { margin: 0; }
+
+.pdf-dados > div {
+  display: grid;
+  grid-template-columns: 12rem 1fr;
+  gap: var(--espaco-3);
+  padding: 0.25rem 0;
+}
+
+.pdf-dados dt {
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.pdf-dados dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.pdf-texto {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap; /* mantém as quebras de linha digitadas */
+}
+
+.pdf-bloco + .pdf-bloco { margin-top: var(--espaco-3); }
+
+.pdf-evolucao {
+  margin-bottom: var(--espaco-4);
+  padding-bottom: var(--espaco-4);
+  border-bottom: 1px solid var(--borda);
+}
+
+.pdf-meta {
+  margin: 0 0 var(--espaco-2);
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.pdf-adendos {
+  margin-top: var(--espaco-3);
+  padding: var(--espaco-2) var(--espaco-3);
+  background: var(--papel);
+  border-left: 3px solid var(--borda-forte);
+}
+
+.pdf-adendos ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pdf-adendos li + li { margin-top: var(--espaco-2); }
+
+.pdf-adendos time {
+  display: block;
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+.pdf-rodape {
+  margin-top: var(--espaco-5);
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda-forte);
+  font-size: var(--texto-pequeno);
+  color: var(--tinta-suave);
+}
+
+@media (max-width: 40rem) {
+  .documento { padding: var(--espaco-3); }
+  .pdf-dados > div { grid-template-columns: 1fr; gap: 0; }
+}
+
+/* ---------------- No PDF / impressão ---------------- */
+/* Os navegadores que aceitam numeração de páginas mostram "Página 1 de 3" no rodapé;
+   os demais ignoram essa parte sem prejuízo. */
+@page {
+  size: A4;
+  margin: 18mm 16mm 20mm;
+
+  @bottom-center {
+    content: "Página " counter(page) " de " counter(pages);
+    font-size: 9pt;
+    color: #555;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+
+  .nao-imprimir { display: none !important; }
+
+  .documento {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .pdf-adendos { background: none; }
+
+  /* Título nunca fica sozinho no fim da página; itens curtos não se partem ao meio */
+  .documento h2,
+  .documento h3 { break-after: avoid; }
+
+  .pdf-dados > div,
+  .pdf-adendos li { break-inside: avoid; }
+}
+
+/* Quatro campos na mesma linha (data, duração, modalidade, presença) */
+.grade > .campo--quarto { grid-column: span 3; }
+
+@media (max-width: 48rem) {
+  .grade > .campo--quarto { grid-column: 1 / -1; }
+}
+
+/* Em telas pequenas o cabeçalho fixo ocuparia espaço demais */
+@media (max-width: 48rem) {
+  .paciente-cabecalho { position: static; }
+}
+
 @media (max-width: 36rem) {
   .dados { grid-template-columns: 1fr; }
   .dialog__rodape > * { flex: 1 1 100%; }

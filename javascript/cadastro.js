@@ -28,7 +28,7 @@ form.addEventListener("submit", async (evento) => {
         toastNaProximaPagina("Conta criada! Agora é só entrar.", "sucesso")
         window.location.href = "login.html"
     } catch (erro) {
-        mostrarErro(erro.response?.data?.mensagem || "Não consegui falar com o servidor. Ele está rodando?")
+        mostrarErro(erro.response?.data?.mensagem || "Erro ao se comunicar com o servidor.")
     } finally {
         botao.disabled = false
     }
