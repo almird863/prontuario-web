@@ -40,9 +40,23 @@ form.addEventListener("submit", async (evento) => {
 
     try {
         await api.post("/auth/login", { email, senha })
-        window.location.replace("../index.html")
     } catch (erro) {
         mostrarErro(mensagemDoErro(erro, "Não foi possível entrar."))
+        botao.disabled = false
+        botao.textContent = "Entrar"
+        return
+    }
+
+    // O servidor aceitou o login. Antes de seguir, confere se o navegador guardou a sessão
+    // (cookie). Sem isso, a página seguinte mandaria de volta para o login sem explicação.
+    try {
+        await api.get("/auth/eu")
+        window.location.replace("../index.html")
+    } catch (erro) {
+        mostrarErro(
+            "O login foi aceito, mas o navegador não guardou a sessão (cookie bloqueado). " +
+                "Tente em outro navegador ou libere os cookies para este site."
+        )
         botao.disabled = false
         botao.textContent = "Entrar"
     }
