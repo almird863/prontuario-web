@@ -159,7 +159,15 @@
       <footer class="dialog__rodape">
         <a href="#" class="botao botao--primario" id="dialog-abrir-prontuario">Abrir prontuário</a>
         <a href="#" class="botao" id="dialog-editar">Editar cadastro</a>
-        <button type="button" class="botao botao--perigo" id="dialog-arquivar">Arquivar paciente</button>
+        <div class="campo dialog__situacao">
+          <label for="dialog-status">Situação</label>
+          <select id="dialog-status">
+            <option value="ativo">Ativo</option>
+            <option value="pausa">Em pausa</option>
+            <option value="alta">Alta</option>
+            <option value="arquivado">Arquivado</option>
+          </select>
+        </div>
       </footer>
 
     </article>

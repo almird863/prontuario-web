@@ -1,8 +1,24 @@
 const corpo = document.getElementById("corpo-pacientes")
 const modelo = document.getElementById("modelo-linha")
 const vazio = document.getElementById("vazio-pacientes")
-const contador = document. getElementById("contador")
+const contador = document.getElementById("contador")
 
+const campoBusca = document.getElementById("filtro-busca")
+const filtroStatus = document.getElementById("filtro-status")
+const filtroOrdem = document.getElementById("filtro-ordem")
+const formFiltros = document.getElementById("form-filtros")
+
+const dialog = document.getElementById("dialog-paciente")
+const dialogTitulo = document.getElementById("dialog-titulo")
+const dialogSubtitulo = document.getElementById("dialog-subtitulo")
+const linkProntuario = document.getElementById("dialog-abrir-prontuario")
+const linkEditar = document.getElementById("dialog-editar")
+const seletorStatus = document.getElementById("dialog-status")
+const dialogConfirmar = document.getElementById("dialog-confirmar")
+
+// ---------------------------------------------------------------------------
+// Apoio
+// ---------------------------------------------------------------------------
 function idadeEmAnos(dataIso) {
     if (!dataIso) return null
 
@@ -13,8 +29,7 @@ function idadeEmAnos(dataIso) {
 
     const jaFezAniversario =
         hoje.getMonth() > nascimento.getUTCMonth() ||
-        (hoje.getMonth() === nascimento.getUTCMonth() &&
-            hoje.getDate() >= nascimento.getUTCDate())
+        (hoje.getMonth() === nascimento.getUTCMonth() && hoje.getDate() >= nascimento.getUTCDate())
 
     if (!jaFezAniversario) idade--
     return idade
@@ -25,28 +40,74 @@ function calcularIdade(dataIso) {
     return idade === null ? "—" : `${idade} anos`
 }
 
-function montarLinha(paciente) {
+function formatarData(dataIso) {
+    if (!dataIso) return ""
+    return new Date(dataIso).toLocaleDateString("pt-BR", { timeZone: "UTC" })
+}
 
+const rotulos = {
+    feminino: "Feminino",
+    masculino: "Masculino",
+    "nao-binario": "Não binário",
+    outro: "Outro",
+    "nao-informado": "Prefere não informar",
+    solteiro: "Solteiro(a)",
+    casado: "Casado(a) / União estável",
+    separado: "Separado(a) / Divorciado(a)",
+    viuvo: "Viúvo(a)",
+}
+
+const rotulosStatus = { ativo: "Ativo", pausa: "Em pausa", alta: "Alta", arquivado: "Arquivado" }
+
+// Junta só as partes que existem: juntar("Rua A", "", "12") -> "Rua A, 12"
+function juntar(...partes) {
+    return partes.filter(Boolean).join(", ")
+}
+
+function textoEndereco(e = {}) {
+    const rua = juntar(e.logradouro, e.numero, e.complemento)
+    const cidade = [e.cidade, e.uf].filter(Boolean).join("/")
+    return juntar(rua, e.bairro, cidade, e.cep ? `CEP ${e.cep}` : "")
+}
+
+// Serve para o responsável e para o contato de emergência
+function textoPessoa(p = {}) {
+    const nome = p.nome && p.parentesco ? `${p.nome} (${p.parentesco})` : p.nome || ""
+    return juntar(nome, p.telefone)
+}
+
+// Decide o texto de cada campo do dialog. Campo sem valor vira "" (o CSS mostra "Não informado").
+function textoDoCampo(campo, valor) {
+    if (campo === "dataNascimento" || campo === "dataInicio") return formatarData(valor)
+    if (campo === "endereco") return textoEndereco(valor)
+    if (campo === "emergencia" || campo === "responsavel") return textoPessoa(valor)
+    if (campo === "genero" || campo === "estadoCivil") return rotulos[valor] || ""
+    if (typeof valor === "string") return valor
+    return ""
+}
+
+// ---------------------------------------------------------------------------
+// Lista
+// ---------------------------------------------------------------------------
+function montarLinha(paciente) {
     const linha = modelo.content.cloneNode(true)
+    const status = paciente.status || "ativo"
 
     linha.querySelector("tr").dataset.id = paciente._id
+
+    // textContent (e não innerHTML) evita que texto digitado vire código na página
     linha.querySelector(".link-nome").textContent = paciente.nome
     linha.querySelector("[data-col='idade']").textContent = calcularIdade(paciente.dataNascimento)
-    linha.querySelector("[data-col='telefone']").textContent = paciente.telefone || "-"
+    linha.querySelector("[data-col='telefone']").textContent = paciente.telefone || "—"
 
     const selo = linha.querySelector("[data-col='status']")
-    selo.textContent = paciente.status || "ativo"
-    selo.classList.add(`selo--${paciente.status || "ativo"}`)
+    selo.textContent = rotulosStatus[status] || status
+    selo.classList.add(`selo--${status}`)
 
-    linha.querySelector("[data-col='ultimaSessao']").textContent = "-"
+    linha.querySelector("[data-col='ultimaSessao']").textContent = "—"
 
     return linha
 }
-
-const campoBusca = document.getElementById("filtro-busca")
-const filtroStatus = document.getElementById("filtro-status")
-const filtroOrdem = document.getElementById("filtro-ordem")
-const formFiltros = document.getElementById("form-filtros")
 
 let buscaEmAndamento = null
 
@@ -69,17 +130,17 @@ async function carregarPacientes() {
         corpo.replaceChildren()
 
         vazio.hidden = pacientes.length > 0
-        contador.textContent =
-            pacientes.length === 1 ? "1 paciente" : `${pacientes.length} pacientes`
+        contador.textContent = pacientes.length === 1 ? "1 paciente" : `${pacientes.length} pacientes`
 
         pacientes.forEach((paciente) => {
             corpo.appendChild(montarLinha(paciente))
         })
     } catch (erro) {
         if (axios.isCancel(erro)) return // foi cancelada por uma busca mais nova
+        if (erro.response?.status === 401) return // o api.js redireciona para o login
 
         console.error("Erro ao carregar pacientes:", erro)
-        contador.textContent = "Não foi possível carregar os pacientes. O servidor está rodando?"
+        contador.textContent = mensagemDoErro(erro, "Não foi possível carregar os pacientes.")
     }
 }
 
@@ -97,73 +158,35 @@ campoBusca.addEventListener("input", () => {
 filtroStatus.addEventListener("change", carregarPacientes)
 filtroOrdem.addEventListener("change", carregarPacientes)
 
-const dialog = document.getElementById("dialog-paciente")
-const dialogTitulo = document.getElementById("dialog-titulo")
-const dialogSubtitulo = document.getElementById("dialog-subtitulo")
-const linkProntuario = document.getElementById("dialog-abrir-prontuario")
-const linkEditar = document.getElementById("dialog-editar")
+// ---------------------------------------------------------------------------
+// Dialog com os detalhes
+// ---------------------------------------------------------------------------
+let pacienteAbertoId = null
+let statusAtual = "ativo" // situação gravada do paciente que está aberto
+let idadeAberta = null
 
-function formatarData(dataIso) {
-    if (!dataIso) return ""
-    return new Date(dataIso).toLocaleDateString("pt-BR", { timeZone: "UTC" })
-}
-
-const rotulos = {
-    feminino: "Feminino",
-    masculino: "Masculino",
-    "nao-binario": "Não binário",
-    transgenero: "Transgênero",
-    outro: "Outro",
-    "nao-informado": "Prefere não informar",
-    solteiro: "Solteiro(a)",
-    casado: "Casado(a) / União estável",
-    separado: "Separado(a) / Divorciado(a)",
-    viuvo: "Viúvo(a)",
-}
-
-// Junta só as partes que existem: juntar("Rua A", "", "12") -> "Rua A, 12"
-function juntar(...partes) {
-    return partes.filter(Boolean).join(", ")
-}
-
-function textoEndereco(e = {}) {
-    const rua = juntar(e.logradouro, e.numero, e.complemento)
-    const cidade = [e.cidade, e.uf].filter(Boolean).join("/")
-    return juntar(rua, e.bairro, cidade, e.cep ? `CEP ${e.cep}` : "")
-}
-
-// Serve para o responsável e para o contato de emergência
-function textoPessoa(p = {}) {
-    const nome = p.nome && p.parentesco ? `${p.nome} (${p.parentesco})` : p.nome || ""
-    return juntar(nome, p.telefone)
-}
-
-function textoDoCampo(campo, valor) {
-    if (campo === "dataNascimento" || campo === "dataInicio") return formatarData(valor)
-    if (campo === "endereco") return textoEndereco(valor)
-    if (campo === "emergencia" || campo === "responsavel") return textoPessoa(valor)
-    if (campo === "genero" || campo === "estadoCivil") return rotulos[valor] || ""
-    if (typeof valor === "string") return valor
-    return ""
+function atualizarSubtitulo() {
+    dialogSubtitulo.textContent = [
+        idadeAberta !== null ? `${idadeAberta} anos` : "",
+        rotulosStatus[statusAtual] || statusAtual,
+    ]
+        .filter(Boolean)
+        .join(" · ")
 }
 
 async function abrirDetalhes(id) {
     try {
-        const resposta = await api.get(`/pacientes/${id}`)
+        const resposta = await api.get(`/pacientes/${encodeURIComponent(id)}`)
         const paciente = resposta.data
 
+        pacienteAbertoId = paciente._id
+        statusAtual = paciente.status || "ativo"
+        idadeAberta = idadeEmAnos(paciente.dataNascimento)
+
         dialogTitulo.textContent = paciente.nome
-        const idade = idadeEmAnos(paciente.dataNascimento)
+        atualizarSubtitulo()
+        seletorStatus.value = statusAtual
 
-        dialogSubtitulo.textContent = [
-            idade !== null ? `${idade} anos` : "",
-            paciente.status || "",
-        ].filter(Boolean).join(" · ")
-
-// A linha "Responsável legal" só aparece para menores de idade
-dialog.querySelectorAll("[data-somente-menor]").forEach((elemento) => {
-    elemento.hidden = !(idade !== null && idade < 18)
-})
         // Preenche TODOS os campos, inclusive os vazios, para não sobrar
         // dado do paciente aberto antes
         dialog.querySelectorAll("[data-campo]").forEach((elemento) => {
@@ -171,11 +194,18 @@ dialog.querySelectorAll("[data-somente-menor]").forEach((elemento) => {
             elemento.textContent = textoDoCampo(campo, paciente[campo])
         })
 
-        linkProntuario.href = `prontuario.html?id=${paciente._id}`
-        linkEditar.href = `anamnese.html?id=${paciente._id}`
+        // A linha "Responsável legal" só aparece para menores de idade
+        dialog.querySelectorAll("[data-somente-menor]").forEach((elemento) => {
+            elemento.hidden = !(idadeAberta !== null && idadeAberta < 18)
+        })
+
+        linkProntuario.href = `prontuario.html?id=${encodeURIComponent(paciente._id)}`
+        linkEditar.href = `anamnese.html?id=${encodeURIComponent(paciente._id)}`
 
         dialog.showModal()
     } catch (erro) {
+        if (erro.response?.status === 401) return
+
         console.error("Erro ao abrir detalhes:", erro)
         mostrarToast("Não foi possível abrir os detalhes do paciente.", "erro")
     }
@@ -188,8 +218,7 @@ corpo.addEventListener("click", (evento) => {
 
     evento.preventDefault() // impede o link href="#" de subir a página
 
-    const id = gatilho.closest("tr").dataset.id
-    abrirDetalhes(id)
+    abrirDetalhes(gatilho.closest("tr").dataset.id)
 })
 
 // Fechar: botão "Fechar" ou clique fora da janela (a tecla Esc já fecha sozinha)
@@ -199,4 +228,51 @@ dialog.addEventListener("click", (evento) => {
     }
 })
 
+// ---------------------------------------------------------------------------
+// Alterar a situação (inclui arquivar)
+// ---------------------------------------------------------------------------
+async function aplicarStatus(novoStatus) {
+    seletorStatus.disabled = true
+
+    try {
+        await api.put(`/pacientes/${encodeURIComponent(pacienteAbertoId)}/status`, { status: novoStatus })
+
+        statusAtual = novoStatus
+        atualizarSubtitulo()
+        mostrarToast(`Situação alterada para "${rotulosStatus[novoStatus]}".`, "sucesso")
+
+        carregarPacientes() // a lista se ajusta ao filtro (um paciente arquivado sai de "Ativos")
+    } catch (erro) {
+        seletorStatus.value = statusAtual // volta para o valor que está gravado
+        mostrarToast(mensagemDoErro(erro, "Não foi possível alterar a situação."), "erro")
+    } finally {
+        seletorStatus.disabled = false
+    }
+}
+
+seletorStatus.addEventListener("change", () => {
+    const novoStatus = seletorStatus.value
+    if (novoStatus === statusAtual) return
+
+    // Arquivar tira o paciente da lista principal: pede confirmação antes
+    if (novoStatus === "arquivado") {
+        dialogConfirmar.returnValue = "" // sem isso, a escolha da vez anterior ficaria guardada
+        dialogConfirmar.showModal()
+        return
+    }
+
+    aplicarStatus(novoStatus)
+})
+
+dialogConfirmar.addEventListener("close", () => {
+    if (dialogConfirmar.returnValue === "confirmar") {
+        aplicarStatus("arquivado")
+    } else {
+        seletorStatus.value = statusAtual // desistiu: o seletor volta ao que estava
+    }
+})
+
+// ---------------------------------------------------------------------------
+// Início
+// ---------------------------------------------------------------------------
 carregarPacientes()

@@ -772,6 +772,11 @@ body.verificando {
   to   { opacity: 1; transform: none; }
 }
 
+.dialog__situacao {
+  margin-right: auto;
+  min-width: 11rem;
+}
+
 
 /* 10. Avisos (toasts) e responsivo ---------------------------------------- */
 .avisos {
@@ -1394,3 +1399,88 @@ body.verificando {
    Já estão prontos para reaproveitar: .dados, .selo, .dialog, .toast,
    .botao e .campo.
    ------------------------------------------------------------------------- */
+
+   /* Seletor de situação no rodapé do dialog do paciente */
+
+   /* ==========================================================================
+   Ajustes do dialog (cole no FIM do style.css)
+   Estas regras vêm depois das antigas e prevalecem sobre elas.
+   ========================================================================== */
+
+/* Os cantos arredondados também valem para o rodapé colorido */
+.dialog {
+  overflow: hidden;
+}
+
+.dialog::backdrop {
+  backdrop-filter: blur(2px);
+}
+
+/* Cabeçalho: nome e situação, separados do conteúdo por uma linha */
+.dialog__topo {
+  padding-bottom: var(--espaco-3);
+  border-bottom: 1px solid var(--borda);
+}
+
+.dialog__topo h2 {
+  margin-bottom: 0.15rem;
+}
+
+/* Conteúdo: títulos das seções mais discretos e na cor de destaque */
+.dialog__corpo {
+  padding-top: var(--espaco-3);
+}
+
+.dialog__corpo h3 {
+  margin-bottom: var(--espaco-2);
+  font-size: var(--texto-pequeno);
+  color: var(--petroleo);
+}
+
+/* Rodapé: faixa colorida de ponta a ponta, com os itens alinhados ao centro */
+.dialog__rodape {
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--espaco-2);
+  margin: var(--espaco-3) calc(var(--espaco-4) * -1) calc(var(--espaco-4) * -1);
+  padding: var(--espaco-3) var(--espaco-4);
+  background: var(--papel);
+  border-top: 1px solid var(--borda);
+}
+
+/* O botão principal sempre fica por último (à direita) */
+.dialog__rodape .botao--primario {
+  order: 1;
+}
+
+/* Situação: rótulo e seletor na mesma linha, à esquerda do rodapé */
+.dialog__situacao {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--espaco-2);
+  order: -1;
+  min-width: 0;
+  margin-right: auto;
+}
+
+.dialog__situacao label {
+  font-weight: 400;
+  color: var(--tinta-suave);
+  white-space: nowrap;
+}
+
+.dialog__situacao select {
+  width: auto;
+  min-width: 9.5rem;
+}
+
+/* Telas pequenas: a situação ocupa uma linha inteira e os botões ficam empilhados */
+@media (max-width: 36rem) {
+  .dialog__situacao {
+    flex-basis: 100%;
+  }
+
+  .dialog__situacao select {
+    flex: 1;
+  }
+}
